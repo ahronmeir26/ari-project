@@ -33,12 +33,20 @@ export default async function AdminListPage() {
         <p className="mt-1 text-sm text-stone-600">
           Add and edit places. Photos, tags, hours, and location live here.
         </p>
-        <Link
-          href="/admin/help-me-choose"
-          className="mt-3 inline-flex rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm font-medium text-stone-800"
-        >
-          Manage Help me choose buttons →
-        </Link>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Link
+            href="/admin/new"
+            className="inline-flex rounded-xl bg-stone-900 px-3 py-2 text-sm font-semibold text-white"
+          >
+            Add restaurant
+          </Link>
+          <Link
+            href="/admin/help-me-choose"
+            className="inline-flex rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm font-medium text-stone-800"
+          >
+            Manage Help me choose buttons →
+          </Link>
+        </div>
       </div>
 
       {restaurants.length === 0 ? (
