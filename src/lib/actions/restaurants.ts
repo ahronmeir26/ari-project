@@ -175,7 +175,7 @@ export async function createRestaurant(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/admin");
-  redirect(`/admin/${data.id}`);
+  redirect("/admin");
 }
 
 export async function updateRestaurant(id: string, formData: FormData) {

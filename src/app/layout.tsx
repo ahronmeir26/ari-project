@@ -29,7 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${dmSans.variable} ${fraunces.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-stone-50 text-stone-900">
+      <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
       </body>
     </html>
