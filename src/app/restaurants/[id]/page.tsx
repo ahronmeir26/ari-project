@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BottomNav } from "@/components/BottomNav";
 import { getHoursStatus, metaLine } from "@/lib/hours-status";
 import { createServiceClient } from "@/lib/supabase/server";
 import type { RestaurantWithImages } from "@/lib/types";
@@ -54,7 +53,7 @@ export default async function RestaurantDetailPage({ params }: PageProps) {
   const hoursLine = getHoursStatus(restaurant.hours);
 
   return (
-    <div className="mx-auto min-h-full max-w-lg bg-[#f4eee4] text-[#2f2a24] pb-24">
+    <div className="mx-auto min-h-full max-w-lg bg-[#f4eee4] text-[#2f2a24] pb-6">
       <section className="relative h-[42vh] min-h-[280px] overflow-hidden">
         {main ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -150,8 +149,6 @@ export default async function RestaurantDetailPage({ params }: PageProps) {
           </ActionTile>
         </div>
       </section>
-
-      <BottomNav />
     </div>
   );
 }

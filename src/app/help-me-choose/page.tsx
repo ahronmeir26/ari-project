@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BottomNav } from "@/components/BottomNav";
 import { FoodPreferencePicker } from "@/components/FoodPreferencePicker";
 import { buildConflictMap } from "@/lib/help-choose-conflicts";
 import { createServiceClient } from "@/lib/supabase/server";
@@ -26,7 +25,7 @@ export default async function HelpMeChoosePage() {
   );
 
   return (
-    <div className="mx-auto flex min-h-full max-w-lg flex-col bg-background px-4 pb-24 pt-10 text-foreground">
+    <div className="mx-auto flex min-h-full max-w-lg flex-col bg-background px-4 pb-6 pt-10 text-foreground">
       <Link href="/" className="text-sm font-medium text-muted-beige">
         ← Back
       </Link>
@@ -36,8 +35,6 @@ export default async function HelpMeChoosePage() {
       </h1>
 
       <FoodPreferencePicker options={options} conflictMap={conflictMap} />
-
-      <BottomNav />
     </div>
   );
 }

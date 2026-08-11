@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { BottomNav } from "@/components/BottomNav";
 import { createServiceClient } from "@/lib/supabase/server";
 import type { RestaurantWithImages } from "@/lib/types";
 
@@ -102,7 +101,7 @@ export default async function HomePage() {
   const restaurants = (data ?? []) as RestaurantWithImages[];
 
   return (
-    <div className="mx-auto min-h-full max-w-lg bg-background pb-24 text-foreground">
+    <div className="mx-auto min-h-full max-w-lg bg-background pb-6 text-foreground">
       <header className="sticky top-0 z-10 border-b border-border-beige bg-background/95 px-4 py-4 backdrop-blur">
         <div className="flex items-end justify-between gap-3">
           <div>
@@ -146,8 +145,6 @@ export default async function HomePage() {
           </ul>
         )}
       </main>
-
-      <BottomNav />
     </div>
   );
 }
