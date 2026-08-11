@@ -5,6 +5,72 @@ import type { RestaurantWithImages } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
+const CARD_HEIGHT = "h-28";
+
+function HelpMeChooseCard() {
+  return (
+    <li>
+      <Link
+        href="/help-me-choose"
+        className={`relative flex ${CARD_HEIGHT} items-center overflow-hidden rounded-3xl border border-border-beige bg-surface-muted px-5 shadow-[0_1px_0_rgba(58,52,44,0.04)]`}
+      >
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,253,249,0.9),transparent_55%)]" />
+        <div className="relative flex items-center gap-3">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface text-lg">
+            ✦
+          </span>
+          <span className="font-[family-name:var(--font-fraunces)] text-xl font-medium tracking-tight text-foreground">
+            Help me choose
+          </span>
+        </div>
+      </Link>
+    </li>
+  );
+}
+
+function RestaurantCard({ restaurant }: { restaurant: RestaurantWithImages }) {
+  const main =
+    restaurant.restaurant_images?.find((img) => img.is_main) ??
+    restaurant.restaurant_images?.[0];
+  const subtitle = [restaurant.cuisine, restaurant.price_range]
+    .filter(Boolean)
+    .join(" · ");
+
+  return (
+    <li>
+      <Link
+        href={`/restaurants/${restaurant.id}`}
+        className={`relative block ${CARD_HEIGHT} overflow-hidden rounded-3xl border border-border-beige shadow-[0_1px_0_rgba(58,52,44,0.04)]`}
+      >
+        {main ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={main.public_url}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-placeholder-beige" />
+        )}
+
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+        <div className="relative flex h-full flex-col justify-end px-4 pb-3.5 pt-3">
+          <h2 className="line-clamp-1 font-[family-name:var(--font-fraunces)] text-[1.35rem] leading-tight font-medium tracking-tight text-white drop-shadow-sm">
+            {restaurant.name}
+          </h2>
+          {subtitle && (
+            <p className="mt-0.5 line-clamp-1 text-xs font-medium tracking-wide text-white/85">
+              {subtitle}
+            </p>
+          )}
+        </div>
+      </Link>
+    </li>
+  );
+}
+
 export default async function HomePage() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -59,56 +125,24 @@ export default async function HomePage() {
             <p className="font-medium">Could not load restaurants</p>
             <p className="mt-1">{error.message}</p>
           </div>
-        ) : restaurants.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-border-beige bg-surface/80 p-8 text-center">
-            <p className="text-muted-beige">No restaurants yet.</p>
-            <Link
-              href="/admin/new"
-              className="mt-4 inline-flex rounded-xl bg-foreground px-4 py-2.5 text-sm font-semibold text-surface"
-            >
-              Add one in admin
-            </Link>
-          </div>
         ) : (
-          <ul className="space-y-4">
-            {restaurants.map((restaurant) => {
-              const main =
-                restaurant.restaurant_images?.find((img) => img.is_main) ??
-                restaurant.restaurant_images?.[0];
-              return (
-                <li key={restaurant.id}>
-                  <Link
-                    href={`/restaurants/${restaurant.id}`}
-                    className="block overflow-hidden rounded-3xl border border-border-beige bg-surface shadow-[0_1px_0_rgba(58,52,44,0.04)]"
-                  >
-                    <div className="aspect-[16/10] bg-placeholder-beige">
-                      {main ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={main.public_url}
-                          alt={restaurant.name}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-sm text-muted-beige">
-                          No photo
-                        </div>
-                      )}
-                    </div>
-                    <div className="px-4 py-3">
-                      <h2 className="text-lg font-semibold tracking-tight">
-                        {restaurant.name}
-                      </h2>
-                      <p className="mt-0.5 text-sm text-muted-beige">
-                        {[restaurant.cuisine, restaurant.price_range]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </p>
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
+          <ul className="space-y-3">
+            <HelpMeChooseCard />
+            {restaurants.length === 0 ? (
+              <li className="rounded-2xl border border-dashed border-border-beige bg-surface/80 px-4 py-6 text-center">
+                <p className="text-sm text-muted-beige">No restaurants yet.</p>
+                <Link
+                  href="/admin/new"
+                  className="mt-3 inline-flex rounded-xl bg-foreground px-4 py-2.5 text-sm font-semibold text-surface"
+                >
+                  Add one in admin
+                </Link>
+              </li>
+            ) : (
+              restaurants.map((restaurant) => (
+                <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+              ))
+            )}
           </ul>
         )}
       </main>

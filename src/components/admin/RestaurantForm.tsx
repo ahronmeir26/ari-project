@@ -6,20 +6,30 @@ import {
   deleteRestaurant,
   updateRestaurant,
 } from "@/lib/actions/restaurants";
+import { HelpChooseApplicability } from "@/components/admin/HelpChooseApplicability";
 import { HoursEditor } from "@/components/admin/HoursEditor";
 import { ImageGallery } from "@/components/admin/ImageGallery";
 import { TagInput } from "@/components/admin/TagInput";
 import {
   PRICE_RANGES,
   defaultHours,
+  type HelpChooseOption,
   type RestaurantWithImages,
 } from "@/lib/types";
 
 type RestaurantFormProps = {
   restaurant?: RestaurantWithImages;
+  helpChooseOptions?: HelpChooseOption[];
+  selectedHelpChooseOptionIds?: string[];
+  helpChooseConflictMap?: Record<string, string[]>;
 };
 
-export function RestaurantForm({ restaurant }: RestaurantFormProps) {
+export function RestaurantForm({
+  restaurant,
+  helpChooseOptions = [],
+  selectedHelpChooseOptionIds = [],
+  helpChooseConflictMap = {},
+}: RestaurantFormProps) {
   const [isPending, startTransition] = useTransition();
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const [mainExistingId, setMainExistingId] = useState(
@@ -191,6 +201,17 @@ export function RestaurantForm({ restaurant }: RestaurantFormProps) {
             className="w-full rounded-xl border border-stone-300 bg-white px-3 py-2.5 text-base outline-none focus:border-stone-500"
           />
         </label>
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-stone-500">
+          Help me choose
+        </h2>
+        <HelpChooseApplicability
+          options={helpChooseOptions}
+          defaultSelectedIds={selectedHelpChooseOptionIds}
+          conflictMap={helpChooseConflictMap}
+        />
       </section>
 
       <section className="space-y-3">

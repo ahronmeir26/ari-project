@@ -13,6 +13,9 @@ export default function AdminLayout({
             Admin
           </Link>
           <div className="flex items-center gap-3 text-sm">
+            <Link href="/admin/help-me-choose" className="text-stone-600">
+              Picker
+            </Link>
             <Link href="/" className="text-stone-600">
               Public
             </Link>

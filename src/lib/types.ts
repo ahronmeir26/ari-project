@@ -41,6 +41,18 @@ export type RestaurantWithImages = Restaurant & {
   restaurant_images: RestaurantImage[];
 };
 
+export type HelpChooseOption = {
+  id: string;
+  label: string;
+  sort_order: number;
+  created_at: string;
+};
+
+export type HelpChooseConflict = {
+  option_a_id: string;
+  option_b_id: string;
+};
+
 export const DAY_KEYS: DayKey[] = [
   "mon",
   "tue",

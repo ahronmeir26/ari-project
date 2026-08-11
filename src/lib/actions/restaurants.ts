@@ -43,6 +43,40 @@ function parsePriceRange(value: FormDataEntryValue | null): PriceRange | null {
   return null;
 }
 
+function parseHelpChooseOptions(formData: FormData): string[] {
+  return formData
+    .getAll("help_choose_options")
+    .map((v) => String(v))
+    .filter(Boolean);
+}
+
+async function saveRestaurantHelpChooseOptions(
+  restaurantId: string,
+  optionIds: string[],
+) {
+  const supabase = createServiceClient();
+
+  const { error: deleteError } = await supabase
+    .from("restaurant_help_choose_options")
+    .delete()
+    .eq("restaurant_id", restaurantId);
+
+  if (deleteError) throw new Error(deleteError.message);
+
+  if (optionIds.length === 0) return;
+
+  const { error: insertError } = await supabase
+    .from("restaurant_help_choose_options")
+    .insert(
+      optionIds.map((option_id) => ({
+        restaurant_id: restaurantId,
+        option_id,
+      })),
+    );
+
+  if (insertError) throw new Error(insertError.message);
+}
+
 function restaurantPayload(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
   if (!name) {
@@ -172,6 +206,10 @@ export async function createRestaurant(formData: FormData) {
         : null;
 
   await uploadImages(data.id, files, mainNewIndex, 0);
+  await saveRestaurantHelpChooseOptions(
+    data.id,
+    parseHelpChooseOptions(formData),
+  );
 
   revalidatePath("/");
   revalidatePath("/admin");
@@ -215,6 +253,11 @@ export async function updateRestaurant(id: string, formData: FormData) {
   if (mainExistingId) {
     await setMainImage(id, mainExistingId);
   }
+
+  await saveRestaurantHelpChooseOptions(
+    id,
+    parseHelpChooseOptions(formData),
+  );
 
   revalidatePath("/");
   revalidatePath("/admin");
