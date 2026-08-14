@@ -44,7 +44,7 @@ export default async function AdminListPage() {
             href="/admin/help-me-choose"
             className="inline-flex rounded-xl border border-stone-300 bg-white px-3 py-2 text-sm font-medium text-stone-800"
           >
-            Manage Help me choose buttons →
+            Manage filters →
           </Link>
         </div>
       </div>

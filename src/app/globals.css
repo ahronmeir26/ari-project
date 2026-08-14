@@ -32,3 +32,13 @@ h1,
 h2 {
   font-family: var(--font-fraunces), Georgia, serif;
 }
+
+.filter-scroll {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+
+.filter-scroll::-webkit-scrollbar {
+  display: none;
+}

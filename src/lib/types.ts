@@ -39,18 +39,29 @@ export type RestaurantImage = {
 
 export type RestaurantWithImages = Restaurant & {
   restaurant_images: RestaurantImage[];
+  restaurant_help_choose_options?: { option_id: string }[];
+};
+
+export type HelpChooseControlKind = "toggle" | "exclusive";
+
+export type HelpChooseControl = {
+  id: string;
+  kind: HelpChooseControlKind;
+  name: string | null;
+  sort_order: number;
+  created_at: string;
 };
 
 export type HelpChooseOption = {
   id: string;
+  control_id: string;
   label: string;
   sort_order: number;
   created_at: string;
 };
 
-export type HelpChooseConflict = {
-  option_a_id: string;
-  option_b_id: string;
+export type HelpChooseControlWithOptions = HelpChooseControl & {
+  options: HelpChooseOption[];
 };
 
 export const DAY_KEYS: DayKey[] = [

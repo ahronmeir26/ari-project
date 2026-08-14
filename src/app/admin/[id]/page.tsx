@@ -1,12 +1,8 @@
 import { notFound } from "next/navigation";
 import { RestaurantForm } from "@/components/admin/RestaurantForm";
-import { buildConflictMap } from "@/lib/help-choose-conflicts";
+import { loadFilterControls } from "@/lib/load-filters";
 import { createServiceClient } from "@/lib/supabase/server";
-import type {
-  HelpChooseConflict,
-  HelpChooseOption,
-  RestaurantWithImages,
-} from "@/lib/types";
+import type { RestaurantWithImages } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -18,35 +14,26 @@ export default async function EditRestaurantPage({ params }: PageProps) {
   const { id } = await params;
   const supabase = createServiceClient();
 
-  const [restaurantResult, optionsResult, selectedResult, conflictsResult] =
-    await Promise.all([
-      supabase
-        .from("restaurants")
-        .select("*, restaurant_images(*)")
-        .eq("id", id)
-        .maybeSingle(),
-      supabase
-        .from("help_choose_options")
-        .select("*")
-        .order("sort_order", { ascending: true }),
-      supabase
-        .from("restaurant_help_choose_options")
-        .select("option_id")
-        .eq("restaurant_id", id),
-      supabase.from("help_choose_conflicts").select("option_a_id, option_b_id"),
-    ]);
+  const [restaurantResult, filters, selectedResult] = await Promise.all([
+    supabase
+      .from("restaurants")
+      .select("*, restaurant_images(*)")
+      .eq("id", id)
+      .maybeSingle(),
+    loadFilterControls(supabase),
+    supabase
+      .from("restaurant_help_choose_options")
+      .select("option_id")
+      .eq("restaurant_id", id),
+  ]);
 
   if (restaurantResult.error || !restaurantResult.data) {
     notFound();
   }
 
   const restaurant = restaurantResult.data as RestaurantWithImages;
-  const helpChooseOptions = (optionsResult.data ?? []) as HelpChooseOption[];
   const selectedHelpChooseOptionIds =
     selectedResult.data?.map((row) => row.option_id) ?? [];
-  const helpChooseConflictMap = buildConflictMap(
-    (conflictsResult.data ?? []) as HelpChooseConflict[],
-  );
 
   return (
     <div className="space-y-4">
@@ -58,9 +45,8 @@ export default async function EditRestaurantPage({ params }: PageProps) {
       </div>
       <RestaurantForm
         restaurant={restaurant}
-        helpChooseOptions={helpChooseOptions}
+        helpChooseControls={filters.controls}
         selectedHelpChooseOptionIds={selectedHelpChooseOptionIds}
-        helpChooseConflictMap={helpChooseConflictMap}
       />
     </div>
   );

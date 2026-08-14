@@ -13,22 +13,20 @@ import { TagInput } from "@/components/admin/TagInput";
 import {
   PRICE_RANGES,
   defaultHours,
-  type HelpChooseOption,
+  type HelpChooseControlWithOptions,
   type RestaurantWithImages,
 } from "@/lib/types";
 
 type RestaurantFormProps = {
   restaurant?: RestaurantWithImages;
-  helpChooseOptions?: HelpChooseOption[];
+  helpChooseControls?: HelpChooseControlWithOptions[];
   selectedHelpChooseOptionIds?: string[];
-  helpChooseConflictMap?: Record<string, string[]>;
 };
 
 export function RestaurantForm({
   restaurant,
-  helpChooseOptions = [],
+  helpChooseControls = [],
   selectedHelpChooseOptionIds = [],
-  helpChooseConflictMap = {},
 }: RestaurantFormProps) {
   const [isPending, startTransition] = useTransition();
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
@@ -205,12 +203,11 @@ export function RestaurantForm({
 
       <section className="space-y-3">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-stone-500">
-          Help me choose
+          Filters
         </h2>
         <HelpChooseApplicability
-          options={helpChooseOptions}
+          controls={helpChooseControls}
           defaultSelectedIds={selectedHelpChooseOptionIds}
-          conflictMap={helpChooseConflictMap}
         />
       </section>
 
