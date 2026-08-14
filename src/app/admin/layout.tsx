@@ -19,7 +19,7 @@ export default function AdminLayout({
             href="/"
             className="rounded-full border border-stone-300 bg-white px-3 py-1.5 text-sm font-medium text-stone-700"
           >
-            Main menu
+            Home
           </Link>
         </div>
       </header>
